@@ -1,9 +1,27 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Terminal } from "lucide-react";
 
-export const Route = createFileRoute("/")({ component: Home });
+const getSkillsFn = createServerFn({ method: "GET" }).handler(async () => {
+	try {
+		const { data } = await getSkills(dataConnect, {
+			searchTerm: "",
+			limit: 10,
+		});
+
+		return data.skills;
+	} catch (error) {
+		console.error(error);
+		return [];
+	}
+});
+
+export const Route = createFileRoute("/")({
+	component: Home,
+	loader: () => getSkillsFn(),
+});
 
 function Home() {
+	const skills = Route.useLoaderData();
 	return (
 		<div id="home">
 			<section className="hero">
@@ -39,6 +57,18 @@ function Home() {
 						{" "}
 						Latest skills loaded from database in descending creation order.
 					</p>
+				</div>
+
+				<div>
+					{skills.length > 0 ? (
+						<div className="skills-grid">
+							{skills.map((skill) => (
+								<SkillCard key={skill.id} {...skill} />
+							))}
+						</div>
+					) : (
+						<p>No skills have been created yet.</p>
+					)}
 				</div>
 			</section>
 		</div>
