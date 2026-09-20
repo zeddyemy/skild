@@ -12,6 +12,6 @@ query GetSkills($searchTerm: String = "", $limit: Int = 10) @auth(level: PUBLIC 
     limit: $limit
   ) {
     id title description tags createdAt installCommand
-    author { username imageUrl clerkId email }
+    author { username imageUrl clerkId }
   }
 }

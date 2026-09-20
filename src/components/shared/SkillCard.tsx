@@ -114,7 +114,7 @@ const SkillCard = ({
 
 						<div className="comments">
 							<MessageSquare size={14} />
-							<span>{author.email ? 1 : 0}</span>
+							<span>{author.clerkId ? 1 : 0}</span>
 						</div>
 					</div>
 

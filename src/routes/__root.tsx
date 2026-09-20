@@ -1,7 +1,5 @@
 import { ClerkProvider, useUser } from "@clerk/tanstack-react-start";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { PostHogErrorBoundary, PostHogProvider, usePostHog } from "posthog-js/react";
-import { useEffect, useRef } from "react";
 import type { QueryClient } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
@@ -9,6 +7,12 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import {
+	PostHogErrorBoundary,
+	PostHogProvider,
+	usePostHog,
+} from "posthog-js/react";
+import { useEffect, useRef } from "react";
 import Crosshair from "#/components/shared/Crosshair";
 import Navbar from "../components/layouts/Navbar";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
