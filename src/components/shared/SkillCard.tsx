@@ -7,11 +7,12 @@ import {
 	Copy,
 	MessageSquare,
 } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 
-// import type { GetSkillsData } from "#/dataconnect-generated";
+import type { GetSkillsData } from "#/dataconnect-generated";
 
-// type SkillCardProps = GetSkillsData["skills"][number];
+type SkillCardProps = GetSkillsData["skills"][number];
 
 const SkillCard = ({
 	createdAt,
@@ -22,7 +23,7 @@ const SkillCard = ({
 	author,
 }: SkillCardProps) => {
 	const [copied, setCopied] = useState(false);
-	// const posthog = usePostHog();
+	const posthog = usePostHog();
 
 	const category = tags[0] ?? "General";
 
@@ -31,15 +32,13 @@ const SkillCard = ({
 			await navigator.clipboard.writeText(installCommand);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
-			// posthog.capture("install_command_copied", {
-			// 	skill_title: title,
-			// 	skill_category: category,
-			// 	install_command: installCommand,
-			// });
+			posthog.capture("install_command_copied");
 		} catch {
 			setCopied(false);
 		}
 	};
+
+	const handleOpen = () => posthog.capture("skill_opened");
 
 	return (
 		<article className="skill-card">
@@ -48,6 +47,7 @@ const SkillCard = ({
 				tabIndex={-1}
 				aria-label={`Open ${title}`}
 				className="overlay"
+				onClick={handleOpen}
 			/>
 
 			<div className="chrome">
@@ -83,7 +83,7 @@ const SkillCard = ({
 				</div>
 
 				<div className="summary">
-					<Link to="/skills" className="title-link">
+					<Link to="/skills" className="title-link" onClick={handleOpen}>
 						<h3>{title}</h3>
 					</Link>
 
@@ -123,12 +123,7 @@ const SkillCard = ({
 							to="/skills"
 							className="open"
 							title={`Open ${title}`}
-							// onClick={() =>
-							// 	posthog.capture("skill_opened", {
-							// 		skill_title: title,
-							// 		skill_category: category,
-							// 	})
-							// }
+							onClick={handleOpen}
 						>
 							<span>Open</span>
 							<ArrowUpRight size={14} />

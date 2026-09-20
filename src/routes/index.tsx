@@ -1,5 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
 import { Terminal } from "lucide-react";
+import { usePostHog } from "posthog-js/react";
+import SkillCard from "#/components/shared/SkillCard";
+import { getSkills } from "#/dataconnect-generated";
+import { dataConnect } from "#/lib/firebase";
 
 const getSkillsFn = createServerFn({ method: "GET" }).handler(async () => {
 	try {
@@ -21,6 +26,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+	const posthog = usePostHog();
 	const skills = Route.useLoaderData();
 	return (
 		<div id="home">
@@ -38,11 +44,19 @@ function Home() {
 				</div>
 
 				<div className="actions">
-					<Link to="/skills" className="btn-primary" onClick={() => {}}>
+					<Link
+						to="/skills"
+						className="btn-primary"
+						onClick={() => posthog.capture("browse_registry_clicked")}
+					>
 						<Terminal size={18} />
 						<span>Browse Registry</span>
 					</Link>
-					<Link to="/skills/new" className="btn-secondary" onClick={() => {}}>
+					<Link
+						to="/skills/new"
+						className="btn-secondary"
+						onClick={() => posthog.capture("publish_skill_clicked")}
+					>
 						Publish Skill
 					</Link>
 				</div>
